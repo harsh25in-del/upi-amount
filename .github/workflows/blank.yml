@@ -3,7 +3,7 @@ name: Build Android APK
 on:
   push:
     branches: [ "main", "master" ]
-  workflow_dispatch: # This adds a manual "Run" button to your browser
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,13 +18,17 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: '17'
-        cache: 'gradle'
 
-    - name: Fix Gradle Permissions (Crucial Step)
-      run: chmod +x gradlew
+    - name: Setup Gradle (Bypasses Broken Wrapper)
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: wrapper # Automatically tries the wrapper first, but fixes execution flags
 
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug
+    - name: Force Clean Build
+      run: gradle clean
+
+    - name: Compile App with System Gradle
+      run: gradle assembleDebug --stacktrace
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4

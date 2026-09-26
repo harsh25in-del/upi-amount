@@ -1,4 +1,4 @@
-name: Build Native Android APK
+name: Build Flutter APK
 
 on:
   push:
@@ -13,20 +13,25 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Java JDK 17
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
 
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --split-per-abi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: upi-amount-debug
-          path: app/build/outputs/apk/debug/*.apk
+          name: flutter-apk
+          path: build/app/outputs/flutter-apk/*.apk

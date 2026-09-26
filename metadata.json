@@ -1,0 +1,6 @@
+{
+  "name": "PayCal UPI Calculator",
+  "description": "Smart UPI upcoming payment calculator, recurring autopay estimator, and cash flow forecast.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
